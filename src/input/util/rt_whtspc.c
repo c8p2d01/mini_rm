@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt_whtspc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:25 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/14 16:44:48 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 17:32:27 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 */
 int	ft_white(char c)
 {
-	if (c == 32)
+	if (c == 32 || (c >= 9 && c <= 13))
 		return (1);
 	return (0);
 }

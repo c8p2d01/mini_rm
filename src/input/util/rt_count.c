@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt_count.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:22 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/15 12:09:00 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 17:43:04 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,20 @@ int	count_input(t_list *lst, int *count, char *tmp)
 	{
 		tmp = trm_whtsp((char *)lst->content, 2);
 		if (tmp[0] == 'A' && ft_white(tmp[1]))
-			count[0]++;
+			count[AMBIENT]++;
 		else if (tmp[0] == 'C' && ft_white(tmp[1]))
-			count[1]++;
+			count[CAMERA]++;
 		else if (tmp[0] == 'L' && ft_white(tmp[1]))
-			count[2]++;
+			count[LIGHT]++;
 		else if (!ft_strncmp(tmp, "sp", 2) && ft_white(tmp[2]))
-			count[3]++;
+			count[OBJECTS]++;
 		else if (!ft_strncmp(tmp, "pl", 2) && ft_white(tmp[2]))
-			count[3]++;
+			count[OBJECTS]++;
 		else if (!ft_strncmp(tmp, "cy", 2) && ft_white(tmp[2]))
-			count[3]++;
+			count[OBJECTS]++;
 		else
 		{
+			printf("Error encountered in line >%s<\n", lst->content);
 			free(tmp);
 			return (printf("Error\n Line invalid\n"));
 		}
@@ -52,9 +53,9 @@ int	count_input(t_list *lst, int *count, char *tmp)
 */
 int	check_count(int *count)
 {
-	if (count[0] != 1)
+	if (count[AMBIENT] != 1)
 		perror("Error\nIncorrect number of Ambient Lights\n");
-	else if (count[1] != 1)
+	else if (count[CAMERA] != 1)
 		perror("Error\nIncorrect number of Cameras\n");
 	else
 		return (0);

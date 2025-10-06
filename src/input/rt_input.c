@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt_input.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:28 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/15 16:34:08 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 17:44:25 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	init_mrt(t_mrt *mrt, int *count)
 {
 	mrt->al = ft_calloc(sizeof(t_al), 1);
-	mrt->l = ft_calloc(sizeof(t_light *), count[2] + 1);
+	mrt->l = ft_calloc(sizeof(t_light *), count[LIGHT] + 1);
 	mrt->cam = ft_calloc(sizeof(t_cam), 1);
-	mrt->obj = ft_calloc(sizeof(t_obj *), count[3] + 1);
+	mrt->obj = ft_calloc(sizeof(t_obj *), count[OBJECTS] + 1);
 	return ;
 }
 
@@ -34,16 +34,16 @@ int	parse_input(t_mrt *mrt, t_list *lst, int *count, int flag)
 		else if (((char *)lst->content)[0] == 'C')
 			flag = init_cam(mrt->cam, tmp);
 		else if (((char *)lst->content)[0] == 'L')
-			flag = init_light(mrt->l, tmp, --count[2]);
+			flag = init_light(mrt->l, tmp, --count[LIGHT]);
 		else if (((char *)lst->content)[0] == 's')
-			flag = init_sph(mrt->obj, tmp, --count[3]);
+			flag = init_sph(mrt->obj, tmp, --count[OBJECTS]);
 		else if (((char *)lst->content)[0] == 'p')
-			flag = init_pl(mrt->obj, tmp, --count[3]);
+			flag = init_pl(mrt->obj, tmp, --count[OBJECTS]);
 		else if (((char *)lst->content)[0] == 'c')
-			flag = init_cyl(mrt->obj, tmp, --count[3]);
+			flag = init_cyl(mrt->obj, tmp, --count[OBJECTS]);
 		free_2dstr(tmp);
 		if (flag)
-			return ((printf("[%d]{%s}\n", count[3], (char *)lst->content)) * 0 + count[3] + 1);
+			return ((printf("[%d]{%s}\n", count[OBJECTS], (char *)lst->content)) * 0 + count[OBJECTS] + 1);
 		lst = lst->next;
 	}
 	return (0);
@@ -51,7 +51,6 @@ int	parse_input(t_mrt *mrt, t_list *lst, int *count, int flag)
 
 t_list	*import_data(char *file, t_list *lst)
 {
-	int		i;
 	int		fd;
 	char	*line;
 
@@ -64,12 +63,12 @@ t_list	*import_data(char *file, t_list *lst)
 			close(fd);
 		exit(1);
 	}
-	i = 1;
-	while (i > 0)
+	while (true)
 	{
-		i = get_next_line(fd, &line);
-		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1) < \
-		ft_strlen(line))
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1) < ft_strlen(line))
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 		else
 			free(line);
@@ -101,6 +100,6 @@ int	input(t_mrt *mrt, char *file)
 		good = -1;
 	ft_lstclear(&lst, free);
 	if (good > 0)
-		rt_er_exit(mrt, good - 1, count[3]);
+		rt_er_exit(mrt, good - 1, count[OBJECTS]);
 	return (good);
 }

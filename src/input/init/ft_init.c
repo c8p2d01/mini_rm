@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_init.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:14 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/14 16:44:34 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 17:52:46 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	check_deci(char *s)
  * @param flag [int] 0 if x,y,z, cor; 1 if v_o
  * @return [int] 0 if succesful; 1 if error;
 */
-int	init_cor(char **info, t_vec *cor, int flag)
+int	init_cor(char **info, t_vec3d *cor, int flag)
 {
 	int		i;
 	double	tmp[3];
@@ -83,7 +83,7 @@ int	init_rgb(char **info, int *r, int *g, int *b)
 	*b = -1;
 	while (info[i])
 	{
-		if (i > 2 || ft_isnumeric(info[i]))
+		if (i > 2 || !ft_isnumeric(info[i]))
 			return (free_2dstr(info) + 1);
 		tmp = ft_atoi(info[i]);
 		if (tmp < 0 || tmp > 255)

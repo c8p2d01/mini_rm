@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 17:18:34 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/16 14:44:47 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:22:35 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,23 +16,23 @@ void	keyhook(void *param)
 {
 	t_mrt *mrt = (t_mrt*)param;
 
-	if (mlx_is_key_down(mrt->mlx, MLX_KEY_D))
-		retrace(mrt);
+	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_D))
+	//	retrace(mrt);
 	if (mlx_is_key_down(mrt->mlx, MLX_KEY_ESCAPE))
 		rt_exit(mrt);
-	if (mlx_is_key_down(mrt->mlx, MLX_KEY_UP))
-		reorient(mrt, 'u');
-	if (mlx_is_key_down(mrt->mlx, MLX_KEY_DOWN))
-		reorient(mrt, 'd');
-	if (mlx_is_key_down(mrt->mlx, MLX_KEY_LEFT))
-		reorient(mrt, 'l');
-	if (mlx_is_key_down(mrt->mlx, MLX_KEY_RIGHT))
-		reorient(mrt, 'r');
+	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_UP))
+	//	reorient(mrt, 'u');
+	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_DOWN))
+	//	reorient(mrt, 'd');
+	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_LEFT))
+	//	reorient(mrt, 'l');
+	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_RIGHT))
+	//	reorient(mrt, 'r');
 }
 
 void	render(t_mrt *mrt)
 {
-	t_vec	*scr = screen(mrt->cam);
+	t_vec3d	*scr = screen(mrt->cam);
 	for(int y = 0; y < HGHT; y++)
 	{
 		for(int x = 0; x < WDTH; x++)

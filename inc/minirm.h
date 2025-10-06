@@ -4,10 +4,11 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <fcntl.h>
 # include <math.h>
 # include "../MLX42/include/MLX42/MLX42.h"
-# include "../src/lft/libft.h"
+# include "../ft_libft/inc/libft.h"
 /*
  * DEFINES
  */
@@ -37,20 +38,6 @@
 # define CLEAR_TERM "\e[1;1H\e[2J"
 
 /**
- * struct to represent vectors as one unit and to make returns easier
- * this includes directio vectors and location vectors
- * @param x [double] Value for the X-Component of the vector
- * @param y [double] Value for the Y-Component of the vector
- * @param z [double] Value for the Z-Component of the vector
-*/
-typedef struct s_vec
-{
-	double	x;
-	double	y;
-	double	z;
-}	t_vec;
-
-/**
  * struct for the Ambient lighting
  * @param id [char] char identifier
  * @param lr [double] lighting ratio [0.0 - 1.0]
@@ -77,8 +64,8 @@ typedef struct s_al
 typedef struct s_cam
 {
 	char	id;
-	t_vec	cor;
-	t_vec	v_o;
+	t_vec3d	location;
+	t_vec3d	v_o;
 	double	fov;
 }	t_cam;
 
@@ -94,7 +81,7 @@ typedef struct s_cam
 typedef struct s_light
 {
 	char	id;
-	t_vec	cor;
+	t_vec3d	cor;
 	double	lr;
 	int		r;
 	int		g;
@@ -115,8 +102,8 @@ typedef struct s_light
 typedef struct s_obj
 {
 	char	id;
-	t_vec	cor;
-	t_vec	v_o;
+	t_vec3d	cor;
+	t_vec3d	v_o;
 	double	rad;
 	double	hght;
 	int		r;
@@ -135,30 +122,38 @@ typedef struct s_mrt
 	t_obj	tmp;
 }				t_mrt;
 
+typedef enum scene_elements
+{
+	AMBIENT,
+	CAMERA,
+	LIGHT,
+	OBJECTS
+}	t_elements;
+
 //GEOMETRY-
 
-t_vec	cross(t_vec a, t_vec b);
-t_vec	init_vec(double x, double y, double z);
-t_vec	*vec_alloc(t_vec clone);
-double	veclen(t_vec a);
-t_vec	connect(t_vec a, t_vec b);
-void	addto(t_vec *a, t_vec b);
-t_vec	v_sum(t_vec a, t_vec b);
-void	product(t_vec *a, double m);
-t_vec	v_product(t_vec a, double m);
-void	resize(t_vec *a, double m);
-void	unit(t_vec	*a);
-t_vec	v_unit(t_vec	a);
-double	angle(t_vec a, t_vec b);
-double	calculate_dot(t_vec *a, t_vec *b);
-t_vec	v_invert(t_vec a);
-t_vec	rotate_Z(t_vec org, double deg);
-t_vec	tilt(t_vec org, bool up);
-t_vec	reflect(t_vec in, t_vec norm);// EXIT
+//t_vec3d	cross(t_vec3d a, t_vec3d b);
+//t_vec3d	init_vec3d(double x, double y, double z);
+//t_vec3d	*vec_alloc(t_vec3d clone);
+//double	veclen(t_vec3d a);
+//t_vec3d	connect(t_vec3d a, t_vec3d b);
+//void	addto(t_vec3d *a, t_vec3d b);
+//t_vec3d	v_sum(t_vec3d a, t_vec3d b);
+//void	product(t_vec3d *a, double m);
+//t_vec3d	v_product(t_vec3d a, double m);
+//void	resize(t_vec3d *a, double m);
+//void	unit(t_vec3d	*a);
+//t_vec3d	v_unit(t_vec3d	a);
+//double	angle(t_vec3d a, t_vec3d b);
+//double	calculate_dot(t_vec3d *a, t_vec3d *b);
+//t_vec3d	v_invert(t_vec3d a);
+//t_vec3d	rotate_Z(t_vec3d org, double deg);
+//t_vec3d	tilt(t_vec3d org, bool up);
+//t_vec3d	reflect(t_vec3d in, t_vec3d norm);// EXIT
 
 // DISTANCES
-double	min_dst(t_obj **objs, t_vec point, t_obj **hit);
-double	s_sphere(t_obj *sph, t_vec *point);
+double	min_dst(t_obj **objs, t_vec3d point, t_obj **hit);
+double	s_sphere(t_obj *sph, t_vec3d *point);
 
 // INPUT
 
@@ -179,13 +174,11 @@ char	**split_wh(char const *s);
 
 int		count_input(t_list *lst, int *count, char *tmp);
 int		check_count(int *count);
-void	limit(double *var, double upper, double lower);
-double	i_limit(double var, double upper, double lower);
 
 //INITIALIZATION
 
 int		check_deci(char *s);
-int		init_cor(char **info, t_vec *cor, int flag);
+int		init_cor(char **info, t_vec3d *cor, int flag);
 int		init_rgb(char **info, int *r, int *g, int *b);
 int		init_fov(char *info, double *fov);
 int		init_dim(char *info, double *dim, int flag);
@@ -201,9 +194,9 @@ int		init_cyl(t_obj **cy, char **info, int p);
 //FUNCTIONS
 
 int		input(t_mrt *mrt, char *file);
-t_vec	*screen(t_cam *cam);
-t_vec	single_ray(int x, int y, t_cam *cam, t_vec	scr[3]);
-void	ray(t_mrt *mrt, int x, int y, t_vec *scr, bool print);
+t_vec3d	*screen(t_cam *cam);
+t_vec3d	single_ray(int x, int y, t_cam *cam, t_vec3d scr[3]);
+void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print);
 void	retrace(t_mrt *mrt);
 void	reorient(t_mrt *mrt, char dir);
 

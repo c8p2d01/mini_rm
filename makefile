@@ -1,61 +1,125 @@
-NAME = miniRM
+#OUTPUT NAME
+NAME := cub3D
 
-CC = gcc
+# Folders:
+BUILD	= ./build
+SOURCE	= ./src
 
-FLAGS = -Wall -Werror -Wextra -g
+# Other Variables:
+COMPILER:=	cc
+COMPFLAGS:=	-g #-fsanitize=address #-Wall -Werror -Wextra -Wno-unused-variable 
+DEFINES = -D DEBUG=1
 
-INC =
+# Source Files:
+SRCFILES:=\
+			main.c \
+			rayinit.c \
+			trace.c \
+			\
+			input/rt_input.c \
+			\
+			input/init/ft_init.c \
+			input/init/init_objects.c \
+			input/init/init_scene.c \
+			\
+			input/util/rt_count.c \
+			input/util/rt_whtspc.c \
+			\
+			exit/rt_exit.c \
+#			\
+#			geometry/dist.c \
+#			geometry/ray_cylinder.c \
+#			geometry/ray_plane.c \
+#			geometry/ray_sphere.c \
+#			geometry/geo_maths.c \
+#			\
 
-SR = ./src/
-EX = $(SR)exit/
-IN = $(SR)input/
-IT = $(IN)init/
-UT = $(IN)util/
-GE = $(SR)geometry/
 
-M  = ./MLX42/
-L  = $(SR)lft/
 
-SRC =	$(SR)main.c \
-		$(SR)rayinit.c \
-		$(SR)trace.c \
-		$(EX)rt_exit.c \
-		$(IN)rt_input.c \
-		$(IT)ft_init.c \
-		$(IT)init_objects.c \
-		$(IT)init_scene.c \
-		$(UT)rt_count.c \
-		$(UT)rt_whtspc.c \
-		$(GE)geo_maths.c \
-		$(GE)dist.c \
-#		$(GE)ray_plane.c \
-		$(GE)ray_cylinder.c \
-		$(GE)ray_sphere.c \
+# ------------------------------------------
+# Do not change anything beyond this point!
+# ------------------------------------------
 
-OBJ		= ${SRC:.c=.o}
+# Process Variables
+CC:=		$(COMPILER)
+CFLAGS:=	$(COMPFLAGS)
+SRCS:=		$(addprefix $(SOURCE)/,$(SRCFILES))
+OBJS:=		$(SRCS:$(SOURCE)/%.c=$(BUILD)/%.o)
+NAME:=		./$(NAME)
+OS:=		$(shell uname -s)
 
-all: $(NAME) $(INC)
+.PHONY: all clean fclean re e red clear green
 
-$(NAME): $(INC) $(OBJ)
-	@make bonus -C $(L)
-	@make -C $(M)
-	$(CC) $(FLAGS) $(OBJ) -lm $(M)libmlx42.a $(L)libft.a -o $@
+LFT = ./ft_libft
+LIBMLX = ./MLX42
+LIBRARYS	:= $(LFT)/libft.a
+ifeq ($(shell uname),Darwin)
+	LIBRARYS += $(LIBMLX)/libmlx42.a -framework OpenGL -framework IOKit -lglfw
+else ifeq ($(shell uname),Linux)
+	LIBRARYS += $(LIBMLX)/libmlx42.a -pthread -lm -lglfw
+endif
+RED = "\033[38;2;255;51;51m"
+GRN = "\033[38;2;170;255;170m"
+CLEAR = "\033[0m"
 
-e: all
-	./$(NAME) scenes/basic_cylinder.rt
+ifeq ($(SUBM_STATE),)
+SUBM_FLAG	= submodule
+else 
+SUBM_FLAG	=
+endif
+
+all: $(SUBM_FLAG) lib
+	make -j $(nproc) $(NAME)
+
+submodule: 
+	@git submodule init
+	@git submodule update --remote --init --recursive
+	@cmake -S $(LIBMLX) -B $(LIBMLX)
+
+lib:
+	make bonus -C $(LFT)
+	make -C $(LIBMLX)
+
+# Compile .cpp files to .o Files
+$(OBJS): $(BUILD)%.o : $(SOURCE)%.c
+	@mkdir -p $(dir $@)
+	$(CC) -c $(CFLAGS) $< -o $@
+
+# Main Build Rule
+$(NAME): $(OBJS)
+	@echo "--> Compiling Executable"
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) $(LIBRARYS)
 
 clean:
-	rm -f $(OBJ)
-	@make clean -C $(M)
-	@make clean -C $(L)
+	@make -s red
+	rm -rdf $(BUILD)
+	make clean -C $(LFT)
+	make clean -C $(LIBMLX)
+	@make -s clear
 
-$(%.o): $(%.c)
-	$(CC) -o $@ -c $^
-
-fclean: clean
-	rm -f $(NAME)
-	@make fclean -C $(L)
+fclean:
+	@make -s red
+	rm -rdf $(NAME)
+	rm -rdf $(BUILD)
+	make fclean -C $(LFT)
+	make clean -C $(LIBMLX)
+	@make -s clear
 
 re: fclean all
 
-.PHONY: all clean fclean re
+ree: re
+	./$(NAME) maps/subject.cub
+
+e:
+	make
+	./$(NAME) maps/subject.cub
+
+red:
+	echo $(RED)
+green:
+	echo $(GRN)
+clear:
+	echo $(CLEAR)
+
+.PHONY: all clean fclean re e red clear green
+.SILENT: red clear green
