@@ -1,31 +1,33 @@
-///* ************************************************************************** */
-///*                                                                            */
-///*                                                        :::      ::::::::   */
-///*   dist.c                                             :+:      :+:    :+:   */
-///*                                                    +:+ +:+         +:+     */
-///*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
-///*                                                +#+#+#+#+#+   +#+           */
-///*   Created: 2022/06/14 18:44:20 by cdahlhof          #+#    #+#             */
-///*   Updated: 2025/10/06 15:45:22 by cdahlhof         ###   ########.fr       */
-///*                                                                            */
-///* ************************************************************************** */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dist.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/14 18:44:20 by cdahlhof          #+#    #+#             */
+/*   Updated: 2025/10/06 20:51:29 by cdahlhof         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-//#include "../../inc/minirm.h"
+#include "../../inc/minirm.h"
 
-//double	s_sphere(t_obj *sph, t_vec3d *point)
-//{
-//	double	dist;
+double	s_sphere(t_obj *sph, t_vec3d *point)
+{
+	double	dist;
+	t_vec3d	tmp;
 
-//	dist = veclen(connect(*point, sph->cor));
-//	if (dist > sph->rad)
-//		return(dist - sph->rad);
-//	return (0);
-//}
+	tmp = connect3d(*point, sph->cor);
+	dist = veclen3d(&tmp);
+	if (dist > sph->rad)
+		return(dist - sph->rad);
+	return (0);
+}
 
-///*first case: the point is in between the caps relative to the cylinder -> orth - rad
-///*2nd   case: the point is above or underneath the caps but (would be)within the body -> planedist of cap
-///*3rd   case: the point is outside bot boy and caps -> distance to cor+(hght/2)+(unit(orth)*rad)
-//*/
+/*first case: the point is in between the caps relative to the cylinder -> orth - rad
+/*2nd   case: the point is above or underneath the caps but (would be)within the body -> planedist of cap
+/*3rd   case: the point is outside bot boy and caps -> distance to cor+(hght/2)+(unit(orth)*rad)
+*/
 //double	s_cylinder(t_obj *cyl, t_vec3d *point)
 //{
 //	double	dist;
@@ -66,24 +68,24 @@
 //	return(cos(angle(v_unit(con), pla->v_o)) * veclen(con));
 //}
 
-//double	min_dst(t_obj **objs, t_vec3d point, t_obj **hit)
-//{
-//	double	d = RENDER_DISTANCE * 2;
-//	double	res = RENDER_DISTANCE;
+double	min_dst(t_obj **objs, t_ray *ray)
+{
+	double	d = RENDER_DISTANCE * 2;
+	double	res = RENDER_DISTANCE;
 
-//	for(int i = 0; i[objs]; i++)
-//	{
-//		if (i[objs]->id == 'S')
-//			d = ((s_sphere(i[objs], &point)));
+	for(int i = 0; i[objs]; i++)
+	{
+		if (i[objs]->id == 'S')
+			d = ((s_sphere(i[objs], &ray->origin)));
 //		if (i[objs]->id == 'P')
 //			d = ((s_cylinder(i[objs], &point)));
 //		if (i[objs]->id == 'Z')
 //			d = ((plane(i[objs], &point)));
-//		if (d < res)
-//		{
-//			*hit = objs[i];
-//			res = d;
-//		}
-//	}
-//	return (res);
-//}
+		if (d < res)
+		{
+			ray->hit = objs[i];
+			res = d;
+		}
+	}
+	return (res);
+}

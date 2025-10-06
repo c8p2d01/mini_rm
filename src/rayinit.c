@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:32 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 18:16:45 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 21:22:40 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,16 @@ t_vec3d	*screen(t_cam *cam)
 */
 t_vec3d	single_ray(int x, int y, t_cam *cam, t_vec3d scr[3])
 {
-	t_vec3d	summand;
+	t_vec3d	res;
 	t_vec3d	tmp;
 
-	summand = cam->location;
-	addto3d(&summand, scr[2]);
-	tmp = scr[0];
-	product3d(&tmp, x * DIVERGENCE);
-	addto3d(&summand, tmp);
-	tmp = scr[1];
-	product3d(&tmp, y * DIVERGENCE);
-	addto3d(&summand, tmp);
-	return (connect3d(cam->location, summand));
+	res = new_vec3d(cam->location.x, cam->location.y, cam->location.z);
+	tmp = product3d(&scr[0], (double)x / (WDTH / 2) * ((WDTH * DIVERGENCE) / 2));
+	addto3d(&res, tmp);
+	tmp = product3d(&scr[1], (double)y / (HGHT / 2) * ((HGHT * DIVERGENCE) / 2));
+	addto3d(&res, tmp);
+	addto3d(&res, scr[2]);
+	res = connect3d(cam->location, res);
+	normalise3d(&res);
+	return (res);
 }

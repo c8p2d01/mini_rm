@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_sphere.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:10 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/14 16:44:27 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 19:50:56 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,16 @@
  * 
  * @return Distance to object on this ray vector
  */
-double	hit_sphere(t_vec sph_org, double sph_rad, t_vec ray_or, t_vec ray_dir)
+double	hit_sphere(t_vec3d sph_org, double sph_rad, t_vec3d ray_or, t_vec3d ray_dir)
 {
-	t_vec	oc;
-	t_vec	tmp;
+	t_vec3d	oc;
+	t_vec3d	tmp;
 	double	disc;
 
-	oc = connect(sph_org, ray_or);
-	tmp.x = calculate_dot(&ray_dir, NULL);
-	tmp.y = 2.0 * calculate_dot(&oc, &ray_dir);
-	tmp.z = calculate_dot(&oc, NULL) - sph_rad * sph_rad;
+	oc = connect3d(sph_org, ray_or);
+	tmp.x = dot_product3d(&ray_dir, NULL);
+	tmp.y = 2.0 * dot_product3d(&oc, &ray_dir);
+	tmp.z = dot_product3d(&oc, NULL) - sph_rad * sph_rad;
 	disc = tmp.y * tmp.y - 4 * tmp.x * tmp.z;
 	if (disc < 0)
 		return (0);

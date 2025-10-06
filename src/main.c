@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 17:18:34 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 18:22:35 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 19:01:04 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ void	keyhook(void *param)
 {
 	t_mrt *mrt = (t_mrt*)param;
 
-	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_D))
-	//	retrace(mrt);
+	if (mlx_is_key_down(mrt->mlx, MLX_KEY_D))
+		retrace(mrt);
 	if (mlx_is_key_down(mrt->mlx, MLX_KEY_ESCAPE))
 		rt_exit(mrt);
 	//if (mlx_is_key_down(mrt->mlx, MLX_KEY_UP))

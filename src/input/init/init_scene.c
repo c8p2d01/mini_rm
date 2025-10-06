@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:19 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 17:45:45 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/06 18:54:14 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	init_cam(t_cam *ca, char **info)
 		return (1);
 	else
 		ca->id = 'K';
-	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->cor, 0))
+	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->location, 0))
 		return (1);
 	if (!info[i] || init_cor(ft_split(info[i ++], ','), &ca->v_o, 1))
 		return (1);

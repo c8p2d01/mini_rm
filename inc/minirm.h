@@ -18,6 +18,7 @@
 # define HGHT 400
 # define DIVERGENCE 100
 # define PI 3.14159265359
+# define GLOW 0.06
 
 # define BLACK "\033[30m"
 # define GREY "\033[90m"
@@ -122,6 +123,16 @@ typedef struct s_mrt
 	t_obj	tmp;
 }				t_mrt;
 
+typedef struct s_ray
+{
+	t_vec3d	origin;
+	t_vec3d	direction;
+	t_obj	*hit;
+	int		depth;
+	double	lowest_step;
+	double	dst;
+}	t_ray;
+
 typedef enum scene_elements
 {
 	AMBIENT,
@@ -152,8 +163,9 @@ typedef enum scene_elements
 //t_vec3d	reflect(t_vec3d in, t_vec3d norm);// EXIT
 
 // DISTANCES
-double	min_dst(t_obj **objs, t_vec3d point, t_obj **hit);
+double	min_dst(t_obj **objs, t_ray *ray);
 double	s_sphere(t_obj *sph, t_vec3d *point);
+double	hit_sphere(t_vec3d sph_org, double sph_rad, t_vec3d ray_or, t_vec3d ray_dir);
 
 // INPUT
 

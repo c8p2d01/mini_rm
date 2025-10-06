@@ -26,8 +26,8 @@ SRCFILES:=\
 			input/util/rt_whtspc.c \
 			\
 			exit/rt_exit.c \
-#			\
-#			geometry/dist.c \
+			\
+			geometry/dist.c \
 #			geometry/ray_cylinder.c \
 #			geometry/ray_plane.c \
 #			geometry/ray_sphere.c \
