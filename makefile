@@ -39,7 +39,7 @@ all: $(NAME) $(INC)
 $(NAME): $(INC) $(OBJ)
 	@make bonus -C $(L)
 	@make -C $(M)
-	$(CC) $(FLAGS) $(OBJ) -L /Users/cdahlhof/goinfre/.brew/Cellar/glfw/3.3.7/lib -lglfw -lm $(M)libmlx42.a $(L)libft.a -o $@
+	$(CC) $(FLAGS) $(OBJ) -lm $(M)libmlx42.a $(L)libft.a -o $@
 
 e: all
 	./$(NAME) scenes/basic_cylinder.rt
