@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 19:17:48 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 21:51:08 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:06:58 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,14 @@ void	retrace(t_mrt *mrt)
 	t_vec3d	*scr = screen(mrt->cam);
 	//x = 42;
 	//y = 42;
-	x = x - (WDTH / 2);
-	y = y - (HGHT / 2);
 	printf("\e[1;1H\e[2Jx: %i	y: %i \n", x, y );
-	ray(mrt, x, y , scr, true);
+	ray_starter(mrt, scr, x, y, true);
+	for(int i = 0; i < THREADS; i++)
+	{
+		pthread_mutex_lock(&mrt->threads[i].m_status);
+		mrt->threads[i].status = PAUSED;
+		pthread_mutex_unlock(&mrt->threads[i].m_status);
+	}
 	sleep(1);
 }
 
@@ -68,7 +72,7 @@ double	march(t_mrt *mrt, t_ray *ray, bool print)
 	return(step_dst + march(mrt, ray, print));
 }
 
-int		color(t_mrt *mrt, t_ray *ray, bool print, int divisor)
+int		color(t_ray *ray, bool print)
 {
 	t_obj	*hit;
 
@@ -91,34 +95,23 @@ int		color(t_mrt *mrt, t_ray *ray, bool print, int divisor)
 	return (create_rgbt(0, 255, 0, 255));
 }
 
-void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
+void	ray(t_mrt *mrt, t_ray ray)
 {
-	t_ray	ray;
 	int		depth;
-	static int divisor = 1;
 	
-	ray.origin = mrt->cam->location;
-	ray.direction = single_ray(x, y, mrt->cam, scr);
-	ray.hit = NULL;
-	ray.depth = 0;
-	ray.lowest_step = RENDER_DISTANCE;
-	ray.dst = 0;
-	ray.dst = march(mrt, &ray, print);
+	ray.dst = march(mrt, &ray, ray.print);
 	if (ray.dst > RENDER_DISTANCE)
 		ray.hit = NULL;
-	mlx_put_pixel(mrt->img, x + (WDTH / 2), y + (HGHT / 2), color(mrt, &ray, print, divisor));
+	pthread_mutex_lock(&mrt->image_lock);
+	mlx_put_pixel(mrt->img, ray.x, ray.y, color(&ray, ray.print));
+	pthread_mutex_unlock(&mrt->image_lock);
 	
-	if (print)
+	if (ray.print)
 	{
 		if (ray.hit){
 			printf("object kind hit: %c\n", ray.hit->id);
 			printf("object position: %lf %lf %lf\n", ray.hit->cor.x, ray.hit->cor.y, ray.hit->cor.z);
-			printf("0	%p\n", mrt->obj[0]);
-			printf("tmp	%p\n", &mrt->tmp);
-			printf("hit	%p\n", ray.hit);
 		}
 		printf("distance to object: %lf\n", ray.dst);
 	}
-	if (ray.depth > divisor && ray.hit)
-		divisor = ray.depth;
 }

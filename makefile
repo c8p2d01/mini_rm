@@ -21,6 +21,7 @@ SRCFILES:=\
 			input/init/ft_init.c \
 			input/init/init_objects.c \
 			input/init/init_scene.c \
+			input/init/init_threads.c \
 			\
 			input/util/rt_count.c \
 			input/util/rt_whtspc.c \

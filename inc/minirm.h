@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <stdbool.h>
 # include <fcntl.h>
+# include <pthread.h>
 # include <math.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "../ft_libft/inc/libft.h"
@@ -13,9 +14,10 @@
  * DEFINES
  */
 
+# define THREADS 2
 # define RENDER_DISTANCE 20000
-# define WDTH 400
-# define HGHT 400
+# define WDTH 601
+# define HGHT 601
 # define DIVERGENCE 100
 # define PI 3.14159265359
 # define GLOW 0.06
@@ -112,6 +114,32 @@ typedef struct s_obj
 	int		b;
 }	t_obj;
 
+typedef struct s_mrt t_mrt;
+
+typedef struct s_ray
+{
+	t_vec3d	origin;
+	t_vec3d	direction;
+	t_obj	*hit;
+	double	lowest_step;
+	double	dst;
+	int		depth;
+	int		x;
+	int		y;
+	bool	print;
+}   t_ray;
+
+typedef struct s_render_thread
+{
+	pthread_mutex_t	m_status;
+	int				status;
+	pthread_t		id;
+	int				number;
+	pthread_mutex_t	m_ray;
+	t_ray			ray;
+	t_mrt			*mrt;
+}   t_renthread;
+
 typedef struct s_mrt
 {
 	void	*mlx;
@@ -121,17 +149,19 @@ typedef struct s_mrt
 	t_cam	*cam;
 	t_obj	**obj;
 	t_obj	tmp;
-}				t_mrt;
 
-typedef struct s_ray
+	t_renthread		threads[THREADS];
+	pthread_mutex_t	image_lock;
+}			   t_mrt;
+
+typedef enum e_thread_task
 {
-	t_vec3d	origin;
-	t_vec3d	direction;
-	t_obj	*hit;
-	int		depth;
-	double	lowest_step;
-	double	dst;
-}	t_ray;
+	PAUSED,
+	READY,
+	BUSY,
+	DONE,
+	ERROR
+}	t_thread_task;
 
 typedef enum scene_elements
 {
@@ -160,7 +190,7 @@ typedef enum scene_elements
 //t_vec3d	v_invert(t_vec3d a);
 //t_vec3d	rotate_Z(t_vec3d org, double deg);
 //t_vec3d	tilt(t_vec3d org, bool up);
-//t_vec3d	reflect(t_vec3d in, t_vec3d norm);// EXIT
+//t_vec3d	reflect(t_vecfalse3d in, t_vec3d norm);// EXIT
 
 // DISTANCES
 double	min_dst(t_obj **objs, t_ray *ray);
@@ -203,12 +233,19 @@ int		init_sph(t_obj **sp, char **info, int p);
 int		init_pl(t_obj **pl, char **info, int p);
 int		init_cyl(t_obj **cy, char **info, int p);
 
+
+void	init_mutexes(t_mrt *mrt);
+void	*routine(void *v_renthread);
+void	init_threads(t_mrt *mrt);
+void	destroy_threads(t_mrt *mrt);
+
 //FUNCTIONS
 
 int		input(t_mrt *mrt, char *file);
 t_vec3d	*screen(t_cam *cam);
 t_vec3d	single_ray(int x, int y, t_cam *cam, t_vec3d scr[3]);
-void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print);
+void	ray(t_mrt *mrt, t_ray ray);
+void	ray_starter(t_mrt *mrt, t_vec3d *scr, int x, int y, bool print);
 void	retrace(t_mrt *mrt);
 void	reorient(t_mrt *mrt, char dir);
 

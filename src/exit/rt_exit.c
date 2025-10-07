@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:43:51 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/15 12:21:04 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/07 13:27:00 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 */
 void	rt_er_exit(t_mrt *mrt, int good, int count)
 {
+	destroy_threads(mrt);
 	if (mrt->al)
 		free(mrt->al);
 	if (mrt->cam)
@@ -48,6 +49,7 @@ int	rt_exit(t_mrt *mrt)
 {
 	int	x;
 
+	destroy_threads(mrt);
 	if (mrt->al)
 		free(mrt->al);
 	if (mrt->cam)
