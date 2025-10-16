@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 19:17:48 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 21:51:08 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 13:49:20 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ double	march(t_mrt *mrt, t_ray *ray, bool print)
 		return (step_dst * 2);
 	}
 	normalise3d(&ray->direction);
-	ray->origin = sum3d(ray->origin, product3d(&ray->direction, step_dst));
+	ray->origin = sum3d(ray->origin, product3d(ray->direction, step_dst));
 	ray->depth += 1;
 	if (step_dst < ray->lowest_step)
 		ray->lowest_step = step_dst;
@@ -83,7 +83,7 @@ int		color(t_mrt *mrt, t_ray *ray, bool print, int divisor)
 	}
 	if (hit->id == 'S')
 	{
-		double factor = (ray->depth / 25.f);
+		double factor = (ray->depth / 12.f);
 		//if (print)
 		//	printf("hit sphere at depth %i , div %i color %i %i %i\n", ray->depth, divisor, hit->r * factor, hit->g * factor, hit->b * factor);
 		return (create_rgbt(hit->r * factor, hit->g * factor, hit->b * factor, 255));
@@ -110,6 +110,7 @@ void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
 	
 	if (print)
 	{
+			printf("ray directions x:%.4lf\ty:%.4lf\tz:%.4lf\n", ray.direction.x, ray.direction.y, ray.direction.z);
 		if (ray.hit){
 			printf("object kind hit: %c\n", ray.hit->id);
 			printf("object position: %lf %lf %lf\n", ray.hit->cor.x, ray.hit->cor.y, ray.hit->cor.z);

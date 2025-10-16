@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 17:18:34 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 19:01:04 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 13:42:48 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ int main(int argc, char **argv)
 	mrt.img = mlx_new_image(mrt.mlx, WDTH, HGHT);
 
 	render(&mrt);
+	printf("DEBUG\n");
 	mlx_loop_hook(mrt.mlx, keyhook, &mrt);
 	mlx_loop(mrt.mlx);
 	return(0);
