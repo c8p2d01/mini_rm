@@ -7,12 +7,14 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <math.h>
+# include <pthread.h>
 # include "../MLX42/include/MLX42/MLX42.h"
 # include "../ft_libft/inc/libft.h"
 /*
  * DEFINES
  */
 
+# define THREADS 4
 # define RENDER_DISTANCE 20000
 # define WDTH 400
 # define HGHT 400
@@ -112,15 +114,26 @@ typedef struct s_obj
 	int		b;
 }	t_obj;
 
+
+typedef struct s_mrt t_mrt;
+
+typedef struct s_thread
+{
+	pthread_t		thread;
+	int				id;
+	struct t_mrt	*mrt;
+}	t_thread;
+
 typedef struct s_mrt
 {
-	void	*mlx;
-	void	*img;
-	t_al	*al;
-	t_light	**l;
-	t_cam	*cam;
-	t_obj	**obj;
-	t_obj	tmp;
+	void		*mlx;
+	void		*img[THREADS];
+	t_al		*al;
+	t_light		**l;
+	t_cam		*cam;
+	t_obj		**obj;
+	t_obj		tmp;
+	t_thread	threads[THREADS];
 }				t_mrt;
 
 typedef struct s_ray
@@ -131,7 +144,11 @@ typedef struct s_ray
 	int		depth;
 	double	lowest_step;
 	double	dst;
+	int		x;
+	int		y;
 }	t_ray;
+
+
 
 typedef enum scene_elements
 {
@@ -208,7 +225,7 @@ int		init_cyl(t_obj **cy, char **info, int p);
 int		input(t_mrt *mrt, char *file);
 t_vec3d	*screen(t_cam *cam);
 t_vec3d	single_ray(int x, int y, t_cam *cam, t_vec3d scr[3]);
-void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print);
+int		ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print);
 void	retrace(t_mrt *mrt);
 void	reorient(t_mrt *mrt, char dir);
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rt_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cdahlhof <cdahlhof@student.42wolfsburg.    +#+  +:+       +#+        */
+/*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:43:51 by cdahlhof          #+#    #+#             */
-/*   Updated: 2022/06/15 12:21:04 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 15:13:25 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,9 @@ int	rt_exit(t_mrt *mrt)
 		free(mrt->obj[x ++]);
 	if (mrt->obj)
 		free(mrt->obj);
-	// mlx_ima(mrt->mlx, mrt->img.img);
+	//x = -1;
+	//while (mrt->img[++x])
+	//	mlx_delete_image(mrt->mlx, mrt->img[x].img);
 	mlx_close_window(mrt->mlx);
 	// mlx_destroy_display(mrt->mlx);
 	if (mrt->mlx)

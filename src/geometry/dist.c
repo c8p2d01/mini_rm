@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 18:44:20 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 20:51:29 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 15:48:48 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ double	s_sphere(t_obj *sph, t_vec3d *point)
 	return (0);
 }
 
-/*first case: the point is in between the caps relative to the cylinder -> orth - rad
-/*2nd   case: the point is above or underneath the caps but (would be)within the body -> planedist of cap
-/*3rd   case: the point is outside bot boy and caps -> distance to cor+(hght/2)+(unit(orth)*rad)
-*/
+// // first case: the point is in between the caps relative to the cylinder -> orth - rad
+// // 2nd   case: the point is above or underneath the caps but (would be)within the body -> planedist of cap
+// // 3rd   case: the point is outside bot boy and caps -> distance to cor+(hght/2)+(unit(orth)*rad)
+//
 //double	s_cylinder(t_obj *cyl, t_vec3d *point)
 //{
 //	double	dist;

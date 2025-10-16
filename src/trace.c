@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 19:17:48 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/16 13:49:20 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 15:46:01 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,11 +91,10 @@ int		color(t_mrt *mrt, t_ray *ray, bool print, int divisor)
 	return (create_rgbt(0, 255, 0, 255));
 }
 
-void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
+int	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
 {
 	t_ray	ray;
 	int		depth;
-	static int divisor = 1;
 	
 	ray.origin = mrt->cam->location;
 	ray.direction = single_ray(x, y, mrt->cam, scr);
@@ -106,8 +105,6 @@ void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
 	ray.dst = march(mrt, &ray, print);
 	if (ray.dst > RENDER_DISTANCE)
 		ray.hit = NULL;
-	mlx_put_pixel(mrt->img, x + (WDTH / 2), y + (HGHT / 2), color(mrt, &ray, print, divisor));
-	
 	if (print)
 	{
 			printf("ray directions x:%.4lf\ty:%.4lf\tz:%.4lf\n", ray.direction.x, ray.direction.y, ray.direction.z);
@@ -120,6 +117,5 @@ void	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
 		}
 		printf("distance to object: %lf\n", ray.dst);
 	}
-	if (ray.depth > divisor && ray.hit)
-		divisor = ray.depth;
+	return (color(mrt, &ray, print, 12));
 }
