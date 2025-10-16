@@ -14,10 +14,10 @@
  * DEFINES
  */
 
-# define THREADS 4
+# define THREADS 8
 # define RENDER_DISTANCE 20000
-# define WDTH 400
-# define HGHT 400
+# define WDTH 800
+# define HGHT 800
 # define DIVERGENCE 100
 # define PI 3.14159265359
 # define GLOW 0.06
@@ -121,7 +121,7 @@ typedef struct s_thread
 {
 	pthread_t		thread;
 	int				id;
-	struct t_mrt	*mrt;
+	struct s_mrt	*mrt;
 }	t_thread;
 
 typedef struct s_mrt
@@ -146,6 +146,9 @@ typedef struct s_ray
 	double	dst;
 	int		x;
 	int		y;
+	uint8_t	r;
+	uint8_t	g;
+	uint8_t	b;
 }	t_ray;
 
 

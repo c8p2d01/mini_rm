@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 19:17:48 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/16 15:46:01 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 17:53:12 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,9 +68,21 @@ double	march(t_mrt *mrt, t_ray *ray, bool print)
 	return(step_dst + march(mrt, ray, print));
 }
 
+void	add_light(t_ray *ray, t_ray *light, t_light *l)
+{
+	double	impact;
+
+	impact = angle3d(ray->direction, light->direction);
+	ray->r += impact * l->r;
+	ray->g += impact * l->g;
+	ray->b += impact * l->b;
+}
+
 int		color(t_mrt *mrt, t_ray *ray, bool print, int divisor)
 {
 	t_obj	*hit;
+	t_ray	light;
+	int		i;
 
 	hit = ray->hit;
 	if (hit == NULL)
@@ -81,13 +93,21 @@ int		color(t_mrt *mrt, t_ray *ray, bool print, int divisor)
 			return (create_rgbt(240, 240, 240, 255));
 		return (create_rgbt(0, 0, 0, 255));
 	}
-	if (hit->id == 'S')
+	i = -1;
+	while (mrt->l[++i])
 	{
-		double factor = (ray->depth / 12.f);
-		//if (print)
-		//	printf("hit sphere at depth %i , div %i color %i %i %i\n", ray->depth, divisor, hit->r * factor, hit->g * factor, hit->b * factor);
-		return (create_rgbt(hit->r * factor, hit->g * factor, hit->b * factor, 255));
+		light.origin = mrt->l[i]->cor;
+		light.depth = 0;
+		light.dst = 0;
+		light.lowest_step = RENDER_DISTANCE;
+		light.direction = connect3d(light.origin, sum3d(ray->origin, product3d(ray->direction, ray->dst)));
+		normalise3d(&light.direction);
+		light.dst = march(mrt, &light, false);
+		if (light.hit != ray->hit)
+			continue ;
+		add_light(hit, &light, mrt->l[i]);
 	}
+
 	return (create_rgbt(0, 255, 0, 255));
 }
 
@@ -96,6 +116,7 @@ int	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
 	t_ray	ray;
 	int		depth;
 	
+
 	ray.origin = mrt->cam->location;
 	ray.direction = single_ray(x, y, mrt->cam, scr);
 	ray.hit = NULL;
@@ -116,6 +137,12 @@ int	ray(t_mrt *mrt, int x, int y, t_vec3d *scr, bool print)
 			printf("hit	%p\n", ray.hit);
 		}
 		printf("distance to object: %lf\n", ray.dst);
+	}
+	if (ray.hit)
+	{
+		ray.r = ray.hit->r;
+		ray.g = ray.hit->g;
+		ray.b = ray.hit->b;
 	}
 	return (color(mrt, &ray, print, 12));
 }

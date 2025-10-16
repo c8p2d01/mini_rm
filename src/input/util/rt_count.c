@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:22 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 17:43:04 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/16 16:38:58 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	count_input(t_list *lst, int *count, char *tmp)
 			count[OBJECTS]++;
 		else
 		{
-			printf("Error encountered in line >%s<\n", lst->content);
+			printf("Error encountered in line >%s<\n", (char *)lst->content);
 			free(tmp);
 			return (printf("Error\n Line invalid\n"));
 		}
