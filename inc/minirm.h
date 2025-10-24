@@ -20,6 +20,7 @@
 # define HGHT 800
 # define DIVERGENCE 100
 # define PI 3.14159265359
+# define ANGLE_CONVERSION 180 / 3.14159265359
 # define GLOW 0.06
 
 # define BLACK "\033[30m"
@@ -141,6 +142,7 @@ typedef struct s_ray
 	t_vec3d	origin;
 	t_vec3d	direction;
 	t_obj	*hit;
+	t_vec3d	hit_point;
 	int		depth;
 	double	lowest_step;
 	double	dst;
@@ -196,7 +198,7 @@ void	*extract_line(char **lines, t_mrt *mrt);//proto
 void	rt_er_exit(t_mrt *mrt, int good, int count);
 int		rt_exit(t_mrt *mrt);
 
-int		create_trgb(int t, int r, int g, int b);
+int		create_rgbt(int t, int r, int g, int b);
 void	my_mlx_pixel_put(void *mlx, int x, int y, int color);
 
 char	*trm_whtsp(char *s, int dir);

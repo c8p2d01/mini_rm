@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 18:44:20 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/16 15:48:48 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/24 02:28:42 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ double	s_sphere(t_obj *sph, t_vec3d *point)
 	t_vec3d	tmp;
 
 	tmp = connect3d(*point, sph->cor);
-	dist = veclen3d(&tmp);
+	dist = veclen3d(tmp);
 	if (dist > sph->rad)
 		return(dist - sph->rad);
 	return (0);
@@ -60,13 +60,13 @@ double	s_sphere(t_obj *sph, t_vec3d *point)
 //	}
 //}
 
-//double	plane(t_obj *pla, t_vec3d *point)
-//{
-//	t_vec3d con;
+double	plane(t_obj *pla, t_vec3d *point)
+{
+	t_vec3d con;
 
-//	con = connect(*point, pla->cor);
-//	return(cos(angle(v_unit(con), pla->v_o)) * veclen(con));
-//}
+	con = connect3d(*point, pla->cor);
+	return(dot_3d(con, pla->v_o) / veclen3d(pla->v_o));
+}
 
 double	min_dst(t_obj **objs, t_ray *ray)
 {
@@ -79,8 +79,8 @@ double	min_dst(t_obj **objs, t_ray *ray)
 			d = ((s_sphere(i[objs], &ray->origin)));
 //		if (i[objs]->id == 'P')
 //			d = ((s_cylinder(i[objs], &point)));
-//		if (i[objs]->id == 'Z')
-//			d = ((plane(i[objs], &point)));
+		if (i[objs]->id == 'P')
+			d = ((plane(i[objs], &ray->origin)));
 		if (d < res)
 		{
 			ray->hit = objs[i];
