@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 17:44:28 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/06 17:44:25 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/10/25 20:05:17 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,29 @@ int	parse_input(t_mrt *mrt, t_list *lst, int *count, int flag)
 	return (0);
 }
 
+bool	is_line_a_comment(char *line)
+{
+	bool	ret;
+	int		i;
+
+	ret = false;
+	i = 0;
+	while (line && i[line])
+	{
+		if (i[line] == 32 || (9 <= i[line] && i[line] <= 13))
+		{
+			i++;
+			continue;
+		}
+		if (i[line] == '#')
+		{
+			ret = true;
+		}
+		break;
+	}
+	return (ret);
+}
+
 t_list	*import_data(char *file, t_list *lst)
 {
 	int		fd;
@@ -68,7 +91,9 @@ t_list	*import_data(char *file, t_list *lst)
 		line = get_next_line(fd);
 		if (!line)
 			break ;
-		if (ft_strlen(line) > 0 && (size_t)is_whspace(line, 1) < ft_strlen(line))
+		
+		if (ft_strlen(line) > 0 && !is_line_a_comment(line) && \
+				(size_t)is_whspace(line, 1) < ft_strlen(line))
 			ft_lstadd_back(&lst, ft_lstnew((void *)line));
 		else
 			free(line);
