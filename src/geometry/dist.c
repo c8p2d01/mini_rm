@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 18:44:20 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/24 02:28:42 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:47:44 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ double	s_sphere(t_obj *sph, t_vec3d *point)
 	t_vec3d	tmp;
 
 	tmp = connect3d(*point, sph->cor);
-	dist = veclen3d(tmp);
+	dist = veclen3d(&tmp);
 	if (dist > sph->rad)
 		return(dist - sph->rad);
 	return (0);
@@ -65,7 +65,7 @@ double	plane(t_obj *pla, t_vec3d *point)
 	t_vec3d con;
 
 	con = connect3d(*point, pla->cor);
-	return(dot_3d(con, pla->v_o) / veclen3d(pla->v_o));
+	return(dot_3d(con, pla->v_o) / veclen3d(&pla->v_o));
 }
 
 double	min_dst(t_obj **objs, t_ray *ray)

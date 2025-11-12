@@ -6,7 +6,7 @@
 /*   By: cdahlhof <cdahlhof@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 19:17:48 by cdahlhof          #+#    #+#             */
-/*   Updated: 2025/10/24 02:17:08 by cdahlhof         ###   ########.fr       */
+/*   Updated: 2025/11/12 18:54:09 by cdahlhof         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,20 +88,20 @@ void	add_light(t_ray *ray, t_ray *light, t_light *l, bool print)
 		normal = connect3d(ray->hit->cor, ray->hit_point);
 	if (ray->hit->id == 'P')
 		normal = ray->hit->v_o;
-	impact = (PI / 360) * (90 - (angle3d(normal, light->direction) * (180 / PI))); // TODO : cut this down using maths xD
+	impact = (PI / 360.0) * (180.0 - (angle3d(normal, light->direction) * (180.0 / PI))); // TODO : cut this down using maths xD
 	if (impact < 0)
 		impact = 0;
-	//if (impact > 1)
-	//	impact = 1;
-	ray->r += (ray->r / 256 + impact * l->r / 256) * 127;
-	ray->g += (ray->g / 256 + impact * l->g / 256) * 127;
-	ray->b += (ray->b / 256 + impact * l->b / 256) * 127;
+	if (impact > 1)
+		impact = 1;
+	ray->r += ((ray->r / 255.999) * impact * (l->r / 255.999)) * 255.999;
+	ray->g += ((ray->g / 255.999) * impact * (l->g / 255.999)) * 255.999;
+	ray->b += ((ray->b / 255.999) * impact * (l->b / 255.999)) * 255.999;
 	if (print)
 	{
 		printf("added light %i\t%i\t%i\n", impact * l->r, impact * l->g, impact * l->b);
 		printf("impact angle %lf\n", impact);
 		printf("light ray %lf\t%lf\t%lf\n", light->direction.x, light->direction.y, light->direction.z);
-		printf("norma ray %lf\t%lf\t%lf\nnormal length? %lf\n", normal.x, normal.y, normal.z, veclen3d(normal));
+		printf("norma ray %lf\t%lf\t%lf\nnormal length? %lf\n", normal.x, normal.y, normal.z, veclen3d(&normal));
 	}
 }
 
